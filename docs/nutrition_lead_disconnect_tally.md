@@ -21,6 +21,16 @@ Add **14.4 hours** supplementary for Alexandra Wraith and **120.3 hours** for Ja
 
 ---
 
+## Member names (first membership only)
+
+**Alexandra Wraith (16 members):**  
+Antony Pearce, Belinda Tumbers, Daniel Cawthorne, Drew Riethmuller, Emmanuel Armand, Gareth Bryant, James Nihill, James Zipeure, Mario Raciti, Nina Zhang, Rachael Rodgers, Reece Corbett-Wilkins, Robert Scappatura, Rod Smith, Taylor Spensieri, Tribeni Lodh.
+
+**James Deacy (134 members):**  
+Aaron Hendershot, Adam Hirst, Aileen Sang, Alan Hunter, Alex Badran, Allie Moxon, Andrew Mckillop, Andrew Quinn, Angela Vuksic, Angus Firth, Angus Hamilton, Angus Tse, Anthony Gasparre, Arumugam Yathurshan, Ashutosh Gupta, Asli Cetin, Bernadette Sukkar, Blair Nicholls, Blake Single, Brian Mulder, Brigid Archibald, Bruce Connors, Candice Joll, Carly Martin, Carola Jonas, Caroline Choi, Carrie Barker, Chantel Blankfield, Chloe Bartlett, Chris Allenby, Chris Gray, Chris Hall, Chris Prestipino, Christopher Fennell, Christos Siafakas, Claire Quigley, Conor Martin, Damien Bailey, David Fam, Dean Hyde, Dimitri Courtelis, Duncan Clubb, Edward Farrell, Elliott Shadforth, Eric Peterson, Eric Yip, Ershad Alkozai, Fernando Kularante, Fiona Bones, Geoffrey Brown, Grant McCarthy, Greg Cameron, Isaac Kutcher, James Blake, James Davie, James Loughhead, Jason Pohl, Jeremy Cabral, Jessica Yue, Joe Caristo, Jordan Brown, Josh Mchutchison, Joshua Rogers, Justin Crawford, Karla Robinson, Kate Cooper, Kathy Xu, Kevin Forder, Kostas Thanos, Kristy Kerswell, Lauren Zusy, Lixian Liang, Luci Ellis, Luke O'kane, Magdeline Baramalis, Maggie Kolasky, Marel Pencev, Maria Clarkin, Mathew Camilleri, Matt Congiusta, Matthew Bauld, Matthew Stephens, Matthew Winchur, Matt Williams, Megan Evetts, Melissa Saadat, Melissa Sheehan, Meredith Jordan, Michael Azzi, Michael Miller, Michael Peters, Mike Boutel, Murray Whiteside, Nass Martino, Niamh Scanlon, Nick Perrott, Nigel Bradshaw, Olivia McArdle, Patrick Ibbotson, Paul Bennett, Paul Potter, Paul Slaven, Philip Gartland, Phillip Blackmore, Phillip Silver, Pierre Peyronny, Poonam Naiker, Pranav Bahl, Raymond Roser, Rebecca Larking, Richard Wakefield, Rodrigo Menseses, Rohan Advani, Rosemary Norgate, Rowena Morgan, Sagar Shettar, Sam Mellor, Sandeep Pillay, Sanjeev Prasad, Sarah Tempest, Sebastien Mckenna, Spencer Ivey, Stefan Duro, Stefano Martincigh, Stephen Jani, Stephen Panizza, Tim Johnston, Tim Meurer, Trent Primmer, Vesna Garnett, Victoria Denholm, Vikas Nahar, Vivek Vyas, WIll Hamilton.
+
+---
+
 ## How to regenerate the list and totals
 
 Run the following in Supabase SQL (MCP or dashboard).
