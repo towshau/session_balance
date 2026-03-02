@@ -5,6 +5,7 @@
 **Logic:**
 - **Primary memberships only** — `primary_membership_id IS NULL` (secondary memberships excluded).
 - **First membership only per member** — for each (coach, member) we count only the membership with the **earliest** `start_date` (renewals / later memberships are ignored).
+- **New clients only** — include only members with **weeks_left > 0**: those still in their first 12 weeks from membership start, or with a **future** start date (not yet started). Members past their 12-week mark are excluded.
 - **12 weeks from that membership’s start date** — weeks left = min(12, max(0, 12 − weeks_elapsed)), where weeks_elapsed = floor((ref_date − start_date) / 7).
 - Total hours = sum(weeks_left) × 0.075.
 
@@ -12,16 +13,16 @@
 
 ## Summary: supplementary hours to add (one lump sum per coach)
 
-| Coach            | Staff ID                               | Members (first only) | Total weeks | Total hours to add |
-|------------------|----------------------------------------|----------------------|-------------|--------------------|
-| **Alexandra Wraith** | `2526d373-c09b-424b-9bc8-13d3625186ee` | 16                   | 192         | **14.4**           |
-| **James Deacy**      | `277cb159-9cd9-482f-97d2-a58315b964a2` | 134                  | 1,604       | **120.3**          |
+| Coach            | Staff ID                               | Members (new only) | Total weeks | Total hours to add |
+|------------------|----------------------------------------|--------------------|-------------|--------------------|
+| **Alexandra Wraith** | `2526d373-c09b-424b-9bc8-13d3625186ee` | 16                 | 192         | **14.4**           |
+| **James Deacy**      | `277cb159-9cd9-482f-97d2-a58315b964a2` | 134                | 1,604       | **120.3**          |
 
 Add **14.4 hours** supplementary for Alexandra Wraith and **120.3 hours** for James Deacy in the week you choose (one lump sum each).
 
 ---
 
-## Member names (first membership only)
+## Member names (new clients only: first 12 weeks or future start)
 
 **Alexandra Wraith (16 members):**  
 Antony Pearce, Belinda Tumbers, Daniel Cawthorne, Drew Riethmuller, Emmanuel Armand, Gareth Bryant, James Nihill, James Zipeure, Mario Raciti, Nina Zhang, Rachael Rodgers, Reece Corbett-Wilkins, Robert Scappatura, Rod Smith, Taylor Spensieri, Tribeni Lodh.
@@ -35,7 +36,7 @@ Aaron Hendershot, Adam Hirst, Aileen Sang, Alan Hunter, Alex Badran, Allie Moxon
 
 Run the following in Supabase SQL (MCP or dashboard).
 
-**Member-level list** (first membership only per member; coach, member, start_date, weeks_elapsed, weeks_left):
+**Member-level list** (new clients only: first 12 weeks or future start; coach, member, start_date, weeks_elapsed, weeks_left):
 
 ```sql
 WITH ref AS (SELECT '2025-03-07'::date AS ref_date),
@@ -62,10 +63,11 @@ WITH ref AS (SELECT '2025-03-07'::date AS ref_date),
      )
 SELECT coach_name, staff_id, member_id, member_name, start_date, ref_date, weeks_elapsed, weeks_left
 FROM first_membership
+WHERE weeks_left > 0
 ORDER BY coach_name, member_name;
 ```
 
-**Totals per coach** (first membership only per member):
+**Totals per coach** (new clients only: first 12 weeks or future start):
 
 ```sql
 WITH ref AS (SELECT '2025-03-07'::date AS ref_date),
@@ -85,12 +87,13 @@ WITH ref AS (SELECT '2025-03-07'::date AS ref_date),
          AND mm.end_date > (SELECT ref_date FROM ref)
        ORDER BY c.staff_id, mm.member_id, mm.start_date ASC
      ),
+     new_only AS (SELECT * FROM first_membership WHERE weeks_left > 0),
      agg AS (
        SELECT coach_name, staff_id,
               COUNT(*) AS member_count,
               SUM(weeks_left) AS total_weeks,
               SUM(weeks_left) * 0.075 AS total_hours
-       FROM first_membership
+       FROM new_only
        GROUP BY coach_name, staff_id
      )
 SELECT coach_name, staff_id, member_count, total_weeks, ROUND(total_hours::numeric, 4) AS total_hours
