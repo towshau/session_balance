@@ -147,3 +147,86 @@ flowchart LR
 | **Balance** | Actual hours − expected hours (positive = over, negative = under). |
 
 <small>Key table: `coach_session_expectation_log`. Key view: `view_coach_session_balance_sep25`. Snapshot: `coach_weekly_hours_snapshot`.</small>
+
+---
+
+## What counts toward actual hours worked
+
+Total hours are the sum of these **eight** components. Each is either a fixed allocation per client/report, or comes from supplementary config.
+
+```mermaid
+flowchart TB
+    subgraph ROLES["Role-based hours"]
+        RM[Results manager]
+        HO[Handoff coach]
+        PC[Programming coach]
+        RT[Revenue team]
+        RL[Renewal lead]
+        NL[Nutrition lead]
+        HR[HR direct report]
+    end
+    subgraph EXTRA["Other"]
+        SUPP[Supplementary hours]
+    end
+    RM --> TOTAL[Total hours]
+    HO --> TOTAL
+    PC --> TOTAL
+    RT --> TOTAL
+    RL --> TOTAL
+    NL --> TOTAL
+    HR --> TOTAL
+    SUPP --> TOTAL
+```
+
+| Component | How the amount is set | Where it’s stored / calculated |
+|-----------|------------------------|-------------------------------|
+| **Results manager** | Hours per member (no handoff coach yet) | <small>`work_estimations.per_client_allocation` (role `results_manager`) × member count</small> |
+| **Handoff coach** | Hours per member assigned to this coach | <small>`work_estimations.per_client_allocation` (`handoff_coach`) × member count</small> |
+| **Programming coach** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`programming_coach`) × member count</small> |
+| **Revenue team** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`revenue_team`) × member count</small> |
+| **Renewal lead** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`renewal_lead`) × member count</small> |
+| **Nutrition lead** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`nutrition_lead`) × member count</small> |
+| **HR direct report** | Hours per direct report | <small>`work_estimations.per_client_allocation` (`human_resources`) × count of staff where `direct_report` = this coach</small> |
+| **Supplementary** | Default + any extra hours for the week | <small>`staff_supplementary_default_hours` + `staff_supplementary_additional_hours` (per staff, no single config number)</small> |
+
+<small>Role hours: `get_role_hours_for_week()`, `get_human_resources_hours_for_week()`, `get_staff_sup_hours_for_week()`. Stored in `coach_session_expectation_log` and used in `view_coach_session_expectations`.</small>
+
+---
+
+## Config values: amounts and location
+
+These are the main config values that affect session balance and hours. **Location** is the table (and column or key) where the value lives.
+
+### Role hour allocations (hours per client or per report)
+
+| Role | Amount | Location |
+|------|--------|----------|
+| Results manager | 0.33 h per member | <small>`work_estimations` — `staff_roles` = `results_manager`, `per_client_allocation`</small> |
+| Handoff coach | 0.33 h per member | <small>`work_estimations` — `staff_roles` = `handoff_coach`, `per_client_allocation`</small> |
+| Programming coach | 0.04 h per member | <small>`work_estimations` — `staff_roles` = `programming_coach`, `per_client_allocation`</small> |
+| Revenue team | 0.02 h per member | <small>`work_estimations` — `staff_roles` = `revenue_team`, `per_client_allocation`</small> |
+| Renewal lead | 0.06 h per member | <small>`work_estimations` — `staff_roles` = `renewal_lead`, `per_client_allocation`</small> |
+| Nutrition lead | 0.075 h per member | <small>`work_estimations` — `staff_roles` = `nutrition_lead`, `per_client_allocation`</small> |
+| HR direct report | 1 h per report | <small>`work_estimations` — `staff_roles` = `human_resources`, `per_client_allocation`</small> |
+
+### Contract and session duration (system_config)
+
+| Purpose | Value | Location |
+|---------|--------|----------|
+| Full-time weekly hours | 38 | <small>`system_config` — `config_key` = `Full Time Hours`, `match_pattern` = `FTE`, `config_value`</small> |
+| Part-time weekly hours | 19 | <small>`system_config` — `config_key` = `Part Time Hours`, `match_pattern` = `PTE`, `config_value`</small> |
+| Session length (perform) | 0.7 | <small>`system_config` — `config_key` = `duration_perform`, `match_pattern` = `PERFORM`, `config_value`</small> |
+| Session length (boxing) | 0.7 | <small>`system_config` — `config_key` = `duration_boxing`, `match_pattern` = `BOX`</small> |
+| Session length (squad) | 1.0 | <small>`system_config` — `config_key` = `duration_squad`, `match_pattern` = `SQUAD`</small> |
+| Session length (VO2) | 0.7 | <small>`system_config` — `config_key` = `duration_vo2`, `match_pattern` = `VO2`</small> |
+| Session length (WAM) | 1 | <small>`system_config` — `config_key` = `duration_wam`, `match_pattern` = `WAM`</small> |
+
+### Other config (system_config)
+
+| Purpose | Value | Location |
+|---------|--------|----------|
+| Avg perform consumption | 0.4 | <small>`system_config` — `config_key` = `avg_perform_consumption`</small> |
+| LC buffer | 0.9 | <small>`system_config` — `config_key` = `lc_buffer`</small> |
+
+<small>Session length for balance is read via `get_perform_hours()` from `system_config` (`duration_perform` or PERFORM match).</small>
+
