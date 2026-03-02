@@ -178,16 +178,16 @@ flowchart TB
     SUPP --> TOTAL
 ```
 
-| Component | How the amount is set | Where it’s stored / calculated |
-|-----------|------------------------|-------------------------------|
-| **Results manager** | Hours per member (no handoff coach yet) | <small>`work_estimations.per_client_allocation` (role `results_manager`) × member count</small> |
-| **Handoff coach** | Hours per member assigned to this coach | <small>`work_estimations.per_client_allocation` (`handoff_coach`) × member count</small> |
-| **Programming coach** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`programming_coach`) × member count</small> |
-| **Revenue team** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`revenue_team`) × member count</small> |
-| **Renewal lead** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`renewal_lead`) × member count</small> |
-| **Nutrition lead** | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`nutrition_lead`) × member count</small> |
-| **HR direct report** | Hours per direct report | <small>`work_estimations.per_client_allocation` (`human_resources`) × count of staff where `direct_report` = this coach</small> |
-| **Supplementary** | Default + any extra hours for the week | <small>`staff_supplementary_default_hours` + `staff_supplementary_additional_hours` (per staff, no single config number)</small> |
+| Component | Hours per client/report | How the amount is set | Where it’s stored / calculated |
+|-----------|-------------------------|------------------------|-------------------------------|
+| **Results manager** | 0.33 | Hours per member (no handoff coach yet) | <small>`work_estimations.per_client_allocation` (role `results_manager`) × member count</small> |
+| **Handoff coach** | 0.33 | Hours per member assigned to this coach | <small>`work_estimations.per_client_allocation` (`handoff_coach`) × member count</small> |
+| **Programming coach** | 0.04 | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`programming_coach`) × member count</small> |
+| **Revenue team** | 0.02 | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`revenue_team`) × member count</small> |
+| **Renewal lead** | 0.06 | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`renewal_lead`) × member count</small> |
+| **Nutrition lead** | 0.075 | Hours per member assigned | <small>`work_estimations.per_client_allocation` (`nutrition_lead`) × member count</small> |
+| **HR direct report** | 1 | Hours per direct report | <small>`work_estimations.per_client_allocation` (`human_resources`) × count of staff where `direct_report` = this coach</small> |
+| **Supplementary** | — | Default + any extra hours for the week | <small>`staff_supplementary_default_hours` + `staff_supplementary_additional_hours` (per staff, no single config number)</small> |
 
 <small>Role hours: `get_role_hours_for_week()`, `get_human_resources_hours_for_week()`, `get_staff_sup_hours_for_week()`. Stored in `coach_session_expectation_log` and used in `view_coach_session_expectations`.</small>
 
